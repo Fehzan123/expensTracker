@@ -1,31 +1,29 @@
-import React, {  useState } from 'react'
+import React, { useContext } from 'react'
 
 import Nave from './Nave';
 import { Routes,Route } from 'react-router-dom';
-import Home from './Home';
-import About from './About';
-import Store from './Store';
-import LoginForm from './LoginForm';
+import Home from './Page/Home';
+import About from './Page/About';
+import Store from './Page/Store';
+import AuthContext from './Aouth-context';
+
 
 const App = () => {
-      
-  const [LoginButtonn, setLoginButton] = useState(false);
-  // Correct the typo here
- const ShowLoginForm = () => {
-   setLoginButton(true); // Correct the typo here
- };
+   
+ const authctx=useContext(AuthContext);
+ const LoginL=authctx?.isLonggedIn;
   return (
     <div>
      <Nave/>
   
      <Routes>
 
-     <Route path='/Home' element={<Home/>}/>
-     <Route path='/About'element={<About/>}/>
-     <Route path='/Store' element={<Store/>}/>
+     {LoginL && <Route path='/Home' element={<Home/>}/>}
+    <Route path='/About'element={<About/>}/>
+    <Route path='/Store' element={<Store/>}/>
      </Routes>
      
-     <LoginForm />
+   
     </div>
   )
 }

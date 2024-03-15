@@ -1,46 +1,64 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react"
 
-const AouthContext = React.createContext({
-    token: '',
-    isLogedIn: false, // Define isLogedIn here
-    login: (token, email) => {},
-    logout: () => {},
-    emailInput: (email) => {},
-});
+const AuthContext=React.createContext({
+       token:'',
+    isLonggedIn:false,
+    login:(token,email)=>{},
+    longout:()=>{},
+    autoLogout:()=>{},
+    emailInput:(email)=>{}
 
-export const AouthProvider = (props) => {
-  
+})
 
-    const initialToken = localStorage.getItem('token');
-    const [token, SetToken] = useState(initialToken);
-    const [email, setEmail] = useState();
-    const userIsLoggedIn = !!token;
+  export const AuthContextProvider=(props)=>{
+    const innialToken=localStorage.getItem('token')
+    const [token,SetToken]=useState(innialToken)
+    const [email,setEmail]=useState();
+    const userIsLoggedn=!!token;
+
     const logingHandler=(token)=>{
-        SetToken(token)
-        localStorage.setItem('token',token)
-        localStorage.setItem('email',email)
-  
-      }
-      const longoutHandler=()=>{
+      SetToken(token)
+      localStorage.setItem('token',token)
+      localStorage.setItem('email',email)
+
+    }
+
+    const longoutHandler=()=>{
         SetToken(null)
         localStorage.removeItem('token')
         localStorage.removeItem('email')
-    }  
-    // Rename 'userIsLoggedn' to 'userIsLoggedIn'
+    }
+    const emailInputHandler=()=>{
+      setEmail(email);
+      localStorage.setItem("email",email)
+  }
 
-    const contxtValue = {
-              
+    function autoLogoutHandler(){
+        setTimeout(()=>{
+          console.log('You have been logged out');
+          localStorage.removeItem('token');
+          localStorage.removeItem('email');
+          SetToken(null); // Update the token state to reflect logout
+        },200000)
+      }
+      useEffect(()=>{
+        autoLogoutHandler();
+      },[])
+
+      
+    
+
+    const ContextValue={
+             
       token:token, 
-      isLonggedIn:userIsLoggedIn,
-      login:logingHandler,
-      longout:longoutHandler, // Use 'userIsLoggedIn' instead of 'isLogedIn'
-    };
+        isLonggedIn:userIsLoggedn,
+        login:logingHandler,
+        longout:longoutHandler,
+        autoLogout:autoLogoutHandler,
+        emailInput:emailInputHandler
+    }
+    return <AuthContext.Provider value={ContextValue}>{props.children}</AuthContext.Provider>
+}
 
-    return (
-        <AouthContext.Provider value={contxtValue}>
-            {props.children}
-        </AouthContext.Provider>
-    );
-};
 
-export default AouthContext;
+export default AuthContext;
