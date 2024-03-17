@@ -1,8 +1,40 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const UserUpdate = () => {
+  const [InitialName, setInitialName] = useState("")
+  const [InitialUrl,setInitialUrl] = useState("")
   const enterName=useRef();
   const enterUrl=useRef();
+  useEffect(() => {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCSG5Kbk3sUVdj-uTdvWKMEOnbV-pe5QZY",
+      {
+        method: "POST",
+        body: JSON.stringify({
+        idToken: localStorage.getItem("token"),
+       
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+            console.log(response)
+          return response.json();
+        } else {
+          throw new Error("Authentication error");
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        console.log(res.users[0].displayName);
+        setInitialName(res.users[0].displayName);
+        setInitialUrl(res.users[0].PhotoUrl); // set inital values
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const updateFormHandler=(e)=>{
     e.preventDefault();
         const refName=enterName.current.value;
