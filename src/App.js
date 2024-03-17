@@ -6,10 +6,12 @@ import Home from './Page/Home';
 import About from './Page/About';
 import Store from './Page/Store';
 import AuthContext from './Aouth-context';
+import UserUpdate from './UserUpdate';
+import UserContext from './UserUpdateContext';
 
 
 const App = () => {
-   
+   const {ShowUpdateForm}=useContext(UserContext);
  const authctx=useContext(AuthContext);
  const LoginL=authctx?.isLonggedIn;
   return (
@@ -19,9 +21,11 @@ const App = () => {
      <Routes>
 
      {LoginL && <Route path='/Home' element={<Home/>}/>}
-    <Route path='/About'element={<About/>}/>
-    <Route path='/Store' element={<Store/>}/>
+    {LoginL && <Route path='/About'element={<About/>}/>}
+    {LoginL && <Route path='/Store' element={<Store/>}/>}
+    {LoginL && <Route path='/UserForm' element={<UserUpdate/>}/>}
      </Routes>
+   
      
    
     </div>
