@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom';
 
 const SingInForm = () => {
     const submitHandler = (event) => {
@@ -71,6 +72,7 @@ const SingInForm = () => {
        {isLoading && <p>send request</p>}
         </div>
         <div >
+          <NavLink to="/ForgetPassword">Forget Password</NavLink>
           <button
             type='button'
             
