@@ -15,7 +15,9 @@ const Nave = () => {
     console.log(LoginL);
   }, [authCtx]);
 
- >
+ const LogOutHandler=()=>{
+  authCtx.longout();
+ }
   const ShowUpdatFormHandler=()=>{
     setShowUpdateForm(true);
   }
