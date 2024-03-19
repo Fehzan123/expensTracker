@@ -26,7 +26,7 @@ const Nave = () => {
       <Link to="/Home" className="link">Home</Link>
       <Link to="/About" className="link">About</Link>
       <Link to="/Store" className="link">Store</Link>
-      <NavLink to="/Login">Login</NavLink>
+      {!LoginL && <NavLink to="/Login">Login</NavLink>}
       {LoginL && <Link to="/UserForm" >Update Profile</Link>}
      {LoginL && <button onClick={LogOutHandler}>LogOut</button>}
      
