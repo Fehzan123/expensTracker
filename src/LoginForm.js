@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
 
 import AuthContext from './Aouth-context'
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function LoginForm() {
     const navigate=useNavigate()
@@ -89,6 +89,7 @@ function LoginForm() {
        {!isLoading && <button style={{padding:"8px"}}>{isLogin ? "Login" : "Create Account"}</button>}
        {isLoading && <p>send request</p>}
         </div>
+          <NavLink to="/ForgetPassword">Forget Password</NavLink>
         <div >
           <button
             type='button'

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import './Nave.css'
 import AouthContext from './Aouth-context';
@@ -26,9 +26,10 @@ const Nave = () => {
       <Link to="/Home" className="link">Home</Link>
       <Link to="/About" className="link">About</Link>
       <Link to="/Store" className="link">Store</Link>
+      <NavLink to="/Login">Login</NavLink>
       {LoginL && <Link to="/UserForm" >Update Profile</Link>}
      {LoginL && <button onClick={LogOutHandler}>LogOut</button>}
-     {!LoginL && <LoginForm />}
+     
     </div>
   );
 };
