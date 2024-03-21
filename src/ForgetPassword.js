@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-
+import './ForgetPassword.css';
 const ForgetPassword = () => {
   const EmailRef=useRef();
   const [error, setError] = useState(null);
@@ -35,14 +35,14 @@ const ForgetPassword = () => {
       });
   };
   return (
-    <div>
-        <h1>Change Yuor Password</h1>
-        <label>EnterEmail:-</label>
-        <input type='text' ref={EmailRef}/>
-        <button onClick={forgotPasswordHandler}>Send Email</button>
-        <br></br>
-        <NavLink to="/Login">UserIs Allredy?Login</NavLink>
-    </div>
+    <div className='reset-password-form'>
+    <h1>Change Your Password</h1>
+    <label>Enter Email:</label>
+    <input type='text' ref={EmailRef} />
+    <button>Send Email</button>
+    <br />
+    <NavLink to="/Login">User Is Already? Login</NavLink>
+  </div>
   )
 }
 

@@ -10,6 +10,8 @@ import UserUpdate from './UserUpdate';
 import UserContext from './UserUpdateContext';
 import ForgetPassword from './ForgetPassword';
 import LoginForm from './LoginForm';
+import Daly from './Finentioal/Daly';
+import Yearly from './Finentioal/Yearly';
 
 
 const App = () => {
@@ -28,6 +30,9 @@ const App = () => {
     {LoginL && <Route path='/UserForm' element={<UserUpdate/>}/>}
     <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
     <Route path='/Login' element={<LoginForm/>}/>
+    <Route path='/Daly' element={<Daly/>}/>
+    <Route path='/Monthly' element={<Daly/>}/>
+    <Route path='/Yearly' element={<Yearly/>}/>
      </Routes>
       
      

@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 
 import AuthContext from './Aouth-context'
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import './LoginForm.css';
 function LoginForm() {
     const navigate=useNavigate()
     const [isLogin,Setloging]=useState(false)
@@ -70,7 +70,7 @@ function LoginForm() {
   
     }
   return (
-    <section >
+    <section className=''>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
       <form onSubmit={submitHandler}>
         <div >
