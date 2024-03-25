@@ -1,49 +1,252 @@
-import { useState } from "react";
-import './ExpensForm.css';
+import { useEffect, useState } from 'react';
+
+
+
+
+
+
+
+// import moment from 'moment';
+
+
+
 const ExpensForm = () => {
+
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
-  const [Enterdate, setDate] = useState('');
+  // const [description, setDescription] = useState('');
+  const[Enterdate,setDate]= useState('')
   const [category, setCategory] = useState('');
   const [submittedData, setSubmittedData] = useState([]);
 
-  const SubmitHandler = (e) => {
-    e.preventDefault();
-    const DataCollect = [title, amount, category, Enterdate];
-    setSubmittedData([...submittedData, DataCollect]);
-    setTitle("");
-    setCategory("");
-    setAmount("");
-    setDate("");
+   // Load submitted data from localStorage on component mount
+   const enteredEmail=localStorage.getItem('email');
+   const updatedEmail = enteredEmail ? enteredEmail.replace('@', '').replace('.', '') : '';
+
+
+
+   const fetchExpenses = () => {
+    fetch(`https://expenstraker-default-rtdb.firebaseio.com//user/${updatedEmail}.json`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch expenses');
+        }
+      })
+      .then((data) => {
+        const loadedExpenses = [];
+        for (const key in data) {
+          loadedExpenses.push({ id: key, ...data[key] });
+        }
+        setSubmittedData(loadedExpenses);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-  let totalAmount = submittedData.reduce((sum, item) => sum + parseFloat(item[1]), 0);
 
+
+
+   const downloadfileHandler=()=>{
+
+    
+    const csvData = submittedData.map((expense) => {
+      return [
+        expense.amount,
+        expense.title,
+        expense.category,
+        new Date(expense.date).toLocaleDateString(),
+      ].join(",");
+    });
+
+    console.log("csvData",csvData)
+  
+    const csvHeader = "Amount,Expanse-Name,Category,Date";
+    const csvContent = csvHeader + "\n" + csvData.join("\n");
+  
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "expenses.csv";
+    link.click();
+  
+    URL.revokeObjectURL(url);
+   }
+   useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(token)
+   
+    fetchExpenses();
+  }, []);
+
+
+  const submitHandler = async(event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title,
+      amount: +amount, // Convert amount to a number
+      date:new Date(Enterdate).toISOString(),
+      category,
+    };
+
+    try{
+      const Response=await fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}.json`,
+      {
+       method:"post",
+       body:JSON.stringify(expenseData),
+       headers:{
+        "Content-Type": "application/json",
+       },
+      });
+      if(!Response.ok){
+        throw new Error("Failed to store data to firebase")
+      }
+      const data=await Response.json();
+      console.log(data);
+      setSubmittedData((preItems)=> [...preItems, { ...expenseData, id: data.name }]);
+      setTitle('');
+        setAmount('');
+      setDate('');
+      setCategory('');
+    }catch (error) {
+      console.error("Error:", error);
+    }
+
+    // You can now send expenseData to your backend or handle it as needed
+    
+    
+    // Clear the form after submission
+    
+  };
+
+
+  const deleteExpense = (id) => {
+   console.log(id)
+    fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Expense successfully deleted');
+          setSubmittedData((preItems) => preItems.filter((expense) => expense.id !== id));
+        } else {
+          throw new Error('Failed to delete expense');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+  //Edit the expense
+  const editExpense=(id)=>{
+    //Find the expense proper id
+    const editItem=submittedData.find((expense)=> expense.id === id)
+
+    //populating the selected expense
+    if(editItem){
+       setTitle(editItem.title)
+        setAmount(editItem.amount);
+        setDate(editItem.date);
+        setCategory(editItem.category)
+    }
+    fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
+        method: 'DELETE',
+      }).then((response) => {
+        if (response.ok) {
+          console.log('Expense successfully deleted from database & its populate successfully!');
+          setSubmittedData((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
+        } else {
+          throw new Error('Failed to delete expense');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
+  
+  const sum = submittedData.reduce(
+    (total, expense) => total + parseInt(expense.amount),
+    0
+  );
+ 
+
+  const categories = Array.from(new Set(submittedData.map((expense) => expense.category)));
+  const categoryAmounts = categories.map((category) =>
+    submittedData.reduce((total, expense) => (expense.category === category ? total + expense.amount : total), 0)
+  );
+
+ 
   return (
-    <div className="Contener">
-      <form onSubmit={SubmitHandler}>
-        <label>Title</label>
-        <input value={title} type='text' onChange={(e) => setTitle(e.target.value)} />
-        <label>Amount</label>
-        <input value={amount} type='text' onChange={(e) => setAmount(e.target.value)} />
-        <label>Date</label>
-        <input value={Enterdate} type='date' onChange={(e) => setDate(e.target.value)} />
+    <>
+    <div className="container">
+    <form onSubmit={submitHandler}>
+      <div className="form-control">
+        <label> Expanse-title:-</label>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}  required/>
+      </div>
+      <div className="form-control">
+        <label>Amount:-</label>
+        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+      </div>
+      <div className="form-control">
+        <label>Description</label>
+        <input type='date' min="2019-01-01" max="2024-01-01"  value={Enterdate} onChange={(e) => setDate(e.target.value)} />
+      </div>
+      <div className="form-control">
         <label>Category</label>
-        <input value={category} type='text' onChange={(e) => setCategory(e.target.value)} />
-        <button type='submit'>Add-Expenses</button>
-
-      </form>
-      
-      {submittedData.map((item, index) => (
-        <div key={index}>
-          <div>Title: {item[0]}</div>
-          <div>Amount: {item[1]}</div>
-          <div>Date: {item[2]}</div>
-          <div>Category: {item[3]}</div>
-        </div>
-      ))}
-      <h1>Total Amount: {totalAmount.toFixed(2)}</h1>
+        <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+          <option value="">Select Category</option>
+          <option value="salary">Salary</option>
+          <option value="petrol">Petrol</option>
+          <option value="diesel">Diesel</option>
+          <option value="vegetable">vegetables</option>
+          <option value="grocery">grocery</option>
+          <option value="fruits">friuts</option>
+        </select>
+      </div>
+      <div className="form-actions">
+        <button className='btnsubmit'>Submit</button>
+        <h2>Total Amount:={sum} </h2>
+      </div>
+    </form>
     </div>
+    <div className='mains'>
+      <div>
+    {submittedData.map((item,index)=>{
+      return(
+          <div key={index}>
+            <div>titl:{item.title}</div>
+            <div>Amount{item.amount}</div>
+            <div>Date: {new Date(item.date).toLocaleDateString()}</div>
+            <div>Catagery{item.category}</div>
+            <span><button onClick={() => deleteExpense(index)} className="delete">Delete</button></span>
+          <span ><button onClick={()=>deleteExpense(index)} className="delete">Delete</button></span>
+          </div>
+      )
+    })}
+        </div>
+        <div className='main-chart'>
+        <div className="pie-chart"  style={{ width: '400px', }}>
+        <h3>Expense Categories Distribution</h3>
+       
+      </div>
+      </div>
+      </div>
+     
+      <div className="total-amount">
+     
+      </div>
+    </>
   );
 };
+  
+ 
 
 export default ExpensForm;
