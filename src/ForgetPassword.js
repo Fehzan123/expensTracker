@@ -7,7 +7,7 @@ const ForgetPassword = () => {
   const forgotPasswordHandler = () => {
     setError(null); // Clear any previous error
 
-    fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSG5Kbk3sUVdj-uTdvWKMEOnbV-pe5QZY", {
+    fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDWVq8j72BgEU6JeJm1jPXJD23CNh_f5Tw", {
       method: "post",
       body: JSON.stringify({
         requestType: "PASSWORD_RESET",

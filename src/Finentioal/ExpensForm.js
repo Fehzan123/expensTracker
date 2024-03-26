@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 
-
+import './ExpensForm.css';
 
 
 
@@ -26,7 +26,7 @@ const ExpensForm = () => {
 
 
    const fetchExpenses = () => {
-    fetch(`https://expenstraker-default-rtdb.firebaseio.com//user/${updatedEmail}.json`)
+    fetch(`https://expenstow-default-rtdb.firebaseio.com//user/${updatedEmail}.json`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -94,7 +94,7 @@ const ExpensForm = () => {
     };
 
     try{
-      const Response=await fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}.json`,
+      const Response=await fetch(`https://expenstow-default-rtdb.firebaseio.com/user/${updatedEmail}.json`,
       {
        method:"post",
        body:JSON.stringify(expenseData),
@@ -125,11 +125,12 @@ const ExpensForm = () => {
 
 
   const deleteExpense = (id) => {
-   console.log(id)
-    fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
+   
+    fetch(`https://expenstow-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
       method: 'DELETE',
     })
       .then((response) => {
+        console.log(id)
         if (response.ok) {
           console.log('Expense successfully deleted');
           setSubmittedData((preItems) => preItems.filter((expense) => expense.id !== id));
@@ -155,7 +156,7 @@ const ExpensForm = () => {
         setDate(editItem.date);
         setCategory(editItem.category)
     }
-    fetch(`https://expenstraker-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
+    fetch(`https://expenstow-default-rtdb.firebaseio.com/user/${updatedEmail}/${id}.json`, {
         method: 'DELETE',
       }).then((response) => {
         if (response.ok) {
@@ -221,13 +222,13 @@ const ExpensForm = () => {
       <div>
     {submittedData.map((item,index)=>{
       return(
-          <div key={index}>
+          <div key={index} >
             <div>titl:{item.title}</div>
             <div>Amount{item.amount}</div>
             <div>Date: {new Date(item.date).toLocaleDateString()}</div>
             <div>Catagery{item.category}</div>
-            <span><button onClick={() => deleteExpense(index)} className="delete">Delete</button></span>
-          <span ><button onClick={()=>deleteExpense(index)} className="delete">Delete</button></span>
+            <button onClick={() => deleteExpense(item.id)} className="delete">Delete</button>
+          <button onClick={()=>editExpense(item.id)} className="delete">Edit</button>
           </div>
       )
     })}

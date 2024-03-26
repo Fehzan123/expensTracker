@@ -26,9 +26,9 @@ function LoginForm() {
       setLoading(true);
       let url;
       if (isLogin) {
-        url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSG5Kbk3sUVdj-uTdvWKMEOnbV-pe5QZY";
+        url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDWVq8j72BgEU6JeJm1jPXJD23CNh_f5Tw";
       } else {
-        url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSG5Kbk3sUVdj-uTdvWKMEOnbV-pe5QZY";
+        url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDWVq8j72BgEU6JeJm1jPXJD23CNh_f5Tw";
       }
     
       fetch(url, {
