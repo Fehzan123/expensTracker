@@ -3,12 +3,14 @@ import React, { useContext, useRef, useState } from 'react';
 import AuthContext from './Aouth-context'
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LoginForm.css';
+
 function LoginForm() {
+ 
     const navigate=useNavigate()
     const [isLogin,Setloging]=useState(false)
 
    const authCtx= useContext(AuthContext)
-
+ 
     
     const emailInputRef=useRef()
     const passwordInputRef=useRef()
@@ -57,8 +59,10 @@ function LoginForm() {
           }
         })
         .then((data) => {
-          authCtx.login(data.idToken);
+         
            // Use setIsLonggedIn to update the state
+          
+           authCtx.login(data.idToken);
           localStorage.setItem("email", enterEmail);
           navigate("/Home");
           console.log(data);
