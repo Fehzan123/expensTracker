@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 
 import './ExpensForm.css';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -18,7 +19,7 @@ const ExpensForm = () => {
   const[Enterdate,setDate]= useState('')
   const [category, setCategory] = useState('');
   const [submittedData, setSubmittedData] = useState([]);
-
+const dispatch=useDispatch();
    // Load submitted data from localStorage on component mount
    const enteredEmail=localStorage.getItem('email');
    const updatedEmail = enteredEmail ? enteredEmail.replace('@', '').replace('.', '') : '';
