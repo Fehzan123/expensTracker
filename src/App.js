@@ -12,9 +12,11 @@ import ForgetPassword from './ForgetPassword';
 import LoginForm from './LoginForm';
 import Daly from './Finentioal/Daly';
 import Yearly from './Finentioal/Yearly';
+import { useSelector } from 'react-redux';
 
 
 const App = () => {
+  const isAuth=useSelector(state=>state.auth.isAuthentication)
    const {ShowUpdateForm}=useContext(UserContext);
  const authctx=useContext(AuthContext);
  const LoginL=authctx?.isLonggedIn;
@@ -24,10 +26,10 @@ const App = () => {
   
      <Routes>
 
-     {LoginL && <Route path='/Home' element={<Home/>}/>}
-    {LoginL && <Route path='/About'element={<About/>}/>}
-    {LoginL && <Route path='/Store' element={<Store/>}/>}
-    {LoginL && <Route path='/UserForm' element={<UserUpdate/>}/>}
+     {isAuth && <Route path='/Home' element={<Home/>}/>}
+    {isAuth && <Route path='/About'element={<About/>}/>}
+    {isAuth && <Route path='/Store' element={<Store/>}/>}
+    {isAuth && <Route path='/UserForm' element={<UserUpdate/>}/>}
     <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
     <Route path='/Login' element={<LoginForm/>}/>
     <Route path='/Daly' element={<Daly/>}/>

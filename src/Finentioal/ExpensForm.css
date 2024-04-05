@@ -1,5 +1,5 @@
 .Contener {
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -31,3 +31,4 @@
   button:hover {
     background-color: #0056b3;
   }
+  

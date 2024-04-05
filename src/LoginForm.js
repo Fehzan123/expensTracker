@@ -3,10 +3,11 @@ import React, { useContext, useRef, useState } from 'react';
 import AuthContext from './Aouth-context'
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LoginForm.css';
-
+import {authAction} from './store/auth';
+import { useDispatch } from 'react-redux';
 function LoginForm() {
- 
-    const navigate=useNavigate()
+const dispatch= useDispatch()
+     const navigate=useNavigate()
     const [isLogin,Setloging]=useState(false)
 
    const authCtx= useContext(AuthContext)
@@ -62,7 +63,7 @@ function LoginForm() {
          
            // Use setIsLonggedIn to update the state
           
-           authCtx.login(data.idToken);
+           dispatch(authAction.login(data.idToken))
           localStorage.setItem("email", enterEmail);
           navigate("/Home");
           console.log(data);

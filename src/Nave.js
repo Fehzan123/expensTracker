@@ -5,8 +5,12 @@ import './Nave.css'
 import AouthContext from './Aouth-context';
 import LoginForm from './LoginForm';
 import UserContext from './UserUpdateContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { authAction } from './store/auth';
 
 const Nave = () => {
+ const dispatch= useDispatch();
+  const isAuth=useSelector(state=>state.auth.isAuthentication)
   const authCtx = useContext(AouthContext);
   const {ShowUpdateForm,setShowUpdateForm}=useContext(UserContext);
 
@@ -16,19 +20,26 @@ const Nave = () => {
   }, [authCtx]);
 
  const LogOutHandler=()=>{
-  authCtx.longout();
+  
+  dispatch(authAction.logout());
  }
   const ShowUpdatFormHandler=()=>{
     setShowUpdateForm(true);
   }
+
+  
+
+ 
+  
   return (
     <div className="navbar">
       <Link to="/Home" className="link">Home</Link>
       <Link to="/About" className="link">About</Link>
       <Link to="/Store" className="link">Store</Link>
-      {!LoginL && <NavLink to="/Login">Login</NavLink>}
-      {LoginL && <Link to="/UserForm" >Update Profile</Link>}
-     {LoginL && <button onClick={LogOutHandler}>LogOut</button>}
+     
+      {!isAuth && <NavLink to="/Login">Login</NavLink>}
+      {isAuth && <Link to="/UserForm" >Update Profile</Link>}
+     {isAuth && <button onClick={LogOutHandler}>LogOut</button>}
      
     </div>
   );
