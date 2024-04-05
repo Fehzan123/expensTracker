@@ -9,6 +9,7 @@
   .ExpensLink {
     display: flex;
     justify-content: center;
+    align-items: center;
   }
   
   .ExpensLink a {
@@ -20,11 +21,30 @@
     transition: background-color 0.3s ease;
   }
   
-  .ExpensLink a:hover {
+  .dark-mode .ExpensLink a:hover {
     background-color: #f5f5f5;
+    color: #1e1e1e;
   }
   
   .ExpensLink a.active {
     background-color: #f5f5f5;
     color: #333;
   }
+  .expense-nav {
+    background-color: #ffffff; /* Dark background color */
+    color:black; 
+    
+    /* Light text color */
+  }
+  
+  /* Example for toggling dark mode */
+  .dark-mode .expense-nav {
+    background-color: #1e1e1e; /* Light background color */
+    color: #ffffff; /* Dark text color */
+  }
+  .dark-mode .ExpensLink .link{
+   color: #ffffff; /* Light background color */
+     /* Dark text color */
+  }
+  /* Example for dark mode specific elements */
+  
